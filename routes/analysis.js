@@ -4,33 +4,28 @@ const xlsx = require('xlsx');
 const supabase = require('../config/supabase');
 const nbService = require('../services/naiveBayes');
 
-// routes/analysis.js
 router.post('/import-excel', async (req, res) => {
   try {
-    const workbook = xlsx.readFile('data_penjualan_2025.xlsx');
+    const workbook = xlsx.readFile('data_penjualan_2025.xlsx'); 
     const sheetName = workbook.SheetNames[0];
     const rawData = xlsx.utils.sheet_to_json(workbook.Sheets[sheetName]);
     
-    // 1. Pre-processing: Filter status Selesai (Sesuai Bab 3.1.2)
     const validData = rawData.filter(item => item.status === 'Selesai');
 
-    // 2. Pelabelan Otomatis (Sesuai Bab 3.1.3)
     const processedData = validData.map(item => ({
       product_name: item.nama_produk,
-      total_quantity_sold: item.jumlah_terjual,
-      category: nbService.getLabel(item.jumlah_terjual)
+      total_quantity_sold: parseInt(item.jumlah_terjual),
+      category: nbService.getLabel(parseInt(item.jumlah_terjual))
     }));
 
-    // 3. Simpan ke Supabase
+    // --- LOGIKA PENTING: Hapus data lama agar tidak dobel ---
+    await supabase.from('sales_training_labeled').delete().neq('id', '00000000-0000-0000-0000-000000000000'); 
+    // atau gunakan .neq('product_name', '') jika ID kamu berupa UUID
+
     const { error } = await supabase.from('sales_training_labeled').insert(processedData);
     if (error) throw error;
 
-    // 4. Kirim data hasil olahan ke Frontend untuk ditampilkan di tabel
-    res.json({ 
-      message: "Data Berhasil Diimport & Diklasifikasi!", 
-      count: processedData.length,
-      displayData: processedData // Data ini yang akan muncul di tabel Frontend
-    });
+    res.json({ message: "Berhasil! Data training sekarang bersih & berjumlah " + processedData.length });
   } catch (err) {
     res.status(500).json({ error: err.message });
   }
@@ -98,29 +93,35 @@ router.get('/evaluate', async (req, res) => {
 });
 
 router.get('/periodic-classification', async (req, res) => {
-  const { startDate, endDate } = req.query; // Ambil tanggal dari Frontend
+  const { startDate, endDate, periodType } = req.query;
 
   try {
-    // 1. Ambil data training (hasil import sekali tadi)
     const { data: trainingData } = await supabase.from('sales_training_labeled').select('*');
 
-    // 2. Ambil total penjualan harian dalam rentang waktu
+    // Ambil data berdasarkan range tanggal dari schema date
     const { data: dailyData, error } = await supabase
       .from('daily_sales')
       .select('product_name, quantity_sold')
-      .gte('transaction_date', startDate)
+      .gte('transaction_date', startDate) 
       .lte('transaction_date', endDate);
 
-    // 3. Kelompokkan & Jumlahkan per Produk
+    if (error) throw error;
+
+    // Jika data kosong di range tsb, kirim array kosong agar frontend tidak error
+    if (!dailyData || dailyData.length === 0) {
+      return res.json({ results: [] });
+    }
+
+    // Proses Agregasi
     const summary = dailyData.reduce((acc, curr) => {
       acc[curr.product_name] = (acc[curr.product_name] || 0) + curr.quantity_sold;
       return acc;
     }, {});
 
-    // 4. Lakukan Klasifikasi Naive Bayes untuk tiap produk
     const results = Object.keys(summary).map(name => {
       const totalSold = summary[name];
       const prediction = nbService.predict(totalSold, trainingData);
+      
       return {
         product_name: name,
         total_sold: totalSold,
@@ -128,7 +129,8 @@ router.get('/periodic-classification', async (req, res) => {
       };
     });
 
-    res.json(results);
+    // Kirim dengan key 'results' agar dibaca Frontend
+    res.json({ results }); 
   } catch (err) {
     res.status(500).json({ error: err.message });
   }

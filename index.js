@@ -3,6 +3,7 @@ const cors = require('cors');
 require('dotenv').config();
 const supabase = require('./config/supabase');
 const analysisRoutes = require('./routes/analysis');
+const inventoryRoutes = require('./routes/inventory');
 
 const app = express();
 const PORT = process.env.PORT || 5000;
@@ -12,6 +13,7 @@ app.use(cors());
 app.use(express.json());
 
 app.use('/api/analysis', analysisRoutes);
+app.use('/api/inventory', inventoryRoutes);
 
 // Route Dasar untuk cek status
 app.get('/', (req, res) => {
