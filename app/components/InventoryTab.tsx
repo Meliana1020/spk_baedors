@@ -145,18 +145,18 @@ export default function InventoryTab({ activeTab }: InventoryTabProps) {
 
   return (
     <div className="space-y-6 animate-in fade-in duration-500">
-      <div className="bg-white p-8 rounded-2xl shadow-sm border border-gray-100">
-        <h2 className="text-xl font-bold mb-6 text-gray-800">
+      <div className="bg-white p-4 md:p-8 rounded-2xl shadow-sm border border-gray-100">
+        <h2 className="text-lg md:text-xl font-bold mb-6 text-gray-800">
           {isEditing ? "Edit Transaksi" : "Input Barang Keluar"}
         </h2>
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-          <div className="relative md:col-span-1" onClick={(e) => e.stopPropagation()}>
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 md:gap-4">
+          <div className="relative sm:col-span-1" onClick={(e) => e.stopPropagation()}>
             <div className="flex gap-2">
               <div className="flex-1 relative">
                 <input 
                   type="text" 
                   placeholder="Nama Produk" 
-                  className="w-full p-3 border rounded-xl bg-gray-50 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  className="w-full p-3 border rounded-xl bg-gray-50 focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm"
                   value={newTrans.name} 
                   onChange={(e) => handleProductNameChange(e.target.value)}
                   onFocus={() => {
@@ -183,14 +183,14 @@ export default function InventoryTab({ activeTab }: InventoryTabProps) {
               <button
                 type="button"
                 onClick={() => setShowAllProducts(!showAllProducts)}
-                className="px-3 py-3 bg-gray-100 hover:bg-gray-200 border border-gray-300 rounded-xl transition"
+                className="transition flex-shrink-0"
                 title="Lihat semua produk"
               >
-                <ChevronDown size={20} className={`text-gray-600 transition ${showAllProducts ? 'rotate-180' : ''}`} />
+            
               </button>
             </div>
             {showAllProducts && (
-              <div className="absolute top-full left-0 right-0 mt-1 bg-white border border-gray-300 rounded-xl shadow-lg z-10 max-h-64 overflow-y-auto md:col-span-1">
+              <div className="absolute top-full left-0 right-0 mt-1 bg-white border border-gray-300 rounded-xl shadow-lg z-10 max-h-64 overflow-y-auto sm:col-span-1">
                 {getUniqueProducts().length > 0 ? (
                   getUniqueProducts().map((product, idx) => (
                     <button
@@ -211,18 +211,33 @@ export default function InventoryTab({ activeTab }: InventoryTabProps) {
               </div>
             )}
           </div>
-          <input type="number" placeholder="Jumlah" className="p-3 border rounded-xl bg-gray-50"
-            value={newTrans.qty} onChange={(e) => setNewTrans({ ...newTrans, qty: Number(e.target.value) })} />
-          <input type="date" className="p-3 border rounded-xl bg-gray-50"
-            value={newTrans.date} onChange={(e) => setNewTrans({ ...newTrans, date: e.target.value })} />
+          <input 
+            type="number" 
+            placeholder="Jumlah" 
+            className="p-3 border rounded-xl bg-gray-50 focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm"
+            value={newTrans.qty} 
+            onChange={(e) => setNewTrans({ ...newTrans, qty: Number(e.target.value) })} 
+          />
+          <input 
+            type="date" 
+            className="p-3 border rounded-xl bg-gray-50 focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm"
+            value={newTrans.date} 
+            onChange={(e) => setNewTrans({ ...newTrans, date: e.target.value })} 
+          />
 
-          <div className="flex gap-2">
-            <button onClick={handleSaveTransaction} className={`flex-1 ${isEditing ? 'bg-orange-500 hover:bg-orange-600' : 'bg-blue-600 hover:bg-blue-700'} text-white rounded-xl font-bold transition`}>
+          <div className="flex gap-2 sm:col-span-2 lg:col-span-1">
+            <button 
+              onClick={handleSaveTransaction} 
+              className={`flex-1 ${isEditing ? 'bg-orange-500 hover:bg-orange-600' : 'bg-blue-600 hover:bg-blue-700'} text-white rounded-xl font-bold transition py-3 text-sm`}
+            >
               {isEditing ? "Update" : "Simpan"}
             </button>
             {isEditing && (
-              <button onClick={() => { setIsEditing(null); setNewTrans({name:"", qty:0, date: new Date().toISOString().split('T')[0]}) }} className="p-3 bg-gray-200 rounded-xl hover:bg-gray-300 transition">
-                <XCircle size={20} className="text-gray-600" />
+              <button 
+                onClick={() => { setIsEditing(null); setNewTrans({name:"", qty:0, date: new Date().toISOString().split('T')[0]}) }} 
+                className="p-3 bg-gray-200 rounded-xl hover:bg-gray-300 transition flex-shrink-0"
+              >
+                <XCircle size={18} className="text-gray-600" />
               </button>
             )}
           </div>
@@ -230,42 +245,44 @@ export default function InventoryTab({ activeTab }: InventoryTabProps) {
       </div>
 
       <div className="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden">
-        <div className="p-6 border-b bg-gray-50/50">
-          <h3 className="font-bold text-gray-800">Daftar Transaksi Harian</h3>
+        <div className="p-4 md:p-6 border-b bg-gray-50/50">
+          <h3 className="font-bold text-gray-800 text-sm md:text-base">Daftar Transaksi Harian</h3>
         </div>
-        <table className="w-full text-left">
-          <thead className="bg-gray-50 text-[10px] font-bold text-gray-400 uppercase tracking-widest">
-            <tr>
-              <th className="px-6 py-4">Tanggal</th>
-              <th className="px-6 py-4">Produk</th>
-              <th className="px-6 py-4">Jumlah</th>
-              <th className="px-6 py-4">Aksi</th>
-            </tr>
-          </thead>
-          <tbody className="divide-y divide-gray-100">
-            {dailyLogs.length > 0 ? (
-              dailyLogs.map((log, index) => (
-                <tr key={index} className="hover:bg-blue-50/30 transition">
-                  <td className="px-6 py-4 text-sm text-gray-500">{log.transaction_date}</td>
-                  <td className="px-6 py-4 font-bold text-gray-800">{log.product_name}</td>
-                  <td className="px-6 py-4 text-sm font-medium text-blue-600">{log.quantity_sold} Unit</td>
-                  <td className="px-6 py-4 flex gap-4">
-                    <button onClick={() => startEdit(log)} className="text-amber-500 hover:text-amber-700 transition">
-                      <Pencil size={18} />
-                    </button>
-                    <button onClick={() => handleDelete(log.id)} className="text-red-500 hover:text-red-700 transition">
-                      <Trash2 size={18} />
-                    </button>
-                  </td>
-                </tr>
-              ))
-            ) : (
+        <div className="overflow-x-auto">
+          <table className="w-full text-left text-sm">
+            <thead className="bg-gray-50 text-[10px] md:text-xs font-bold text-gray-400 uppercase tracking-widest">
               <tr>
-                <td colSpan={4} className="px-6 py-10 text-center text-gray-400 italic">Belum ada data transaksi harian.</td>
+                <th className="px-3 md:px-6 py-3 md:py-4 whitespace-nowrap">Tanggal</th>
+                <th className="px-3 md:px-6 py-3 md:py-4 whitespace-nowrap">Produk</th>
+                <th className="px-3 md:px-6 py-3 md:py-4 whitespace-nowrap">Jumlah</th>
+                <th className="px-3 md:px-6 py-3 md:py-4 whitespace-nowrap">Aksi</th>
               </tr>
-            )}
-          </tbody>
-        </table>
+            </thead>
+            <tbody className="divide-y divide-gray-100">
+              {dailyLogs.length > 0 ? (
+                dailyLogs.map((log, index) => (
+                  <tr key={index} className="hover:bg-blue-50/30 transition">
+                    <td className="px-3 md:px-6 py-3 md:py-4 text-gray-500 text-xs md:text-sm whitespace-nowrap">{log.transaction_date}</td>
+                    <td className="px-3 md:px-6 py-3 md:py-4 font-bold text-gray-800 text-xs md:text-sm whitespace-nowrap">{log.product_name}</td>
+                    <td className="px-3 md:px-6 py-3 md:py-4 text-xs md:text-sm font-medium text-blue-600 whitespace-nowrap">{log.quantity_sold} Unit</td>
+                    <td className="px-3 md:px-6 py-3 md:py-4 flex gap-2 md:gap-4">
+                      <button onClick={() => startEdit(log)} className="text-amber-500 hover:text-amber-700 transition flex-shrink-0">
+                        <Pencil size={16} className="md:w-[18px] md:h-[18px]" />
+                      </button>
+                      <button onClick={() => handleDelete(log.id)} className="text-red-500 hover:text-red-700 transition flex-shrink-0">
+                        <Trash2 size={16} className="md:w-[18px] md:h-[18px]" />
+                      </button>
+                    </td>
+                  </tr>
+                ))
+              ) : (
+                <tr>
+                  <td colSpan={4} className="px-3 md:px-6 py-6 md:py-10 text-center text-gray-400 italic text-xs md:text-sm">Belum ada data transaksi harian.</td>
+                </tr>
+              )}
+            </tbody>
+          </table>
+        </div>
       </div>
     </div>
   );

@@ -102,16 +102,16 @@ export default function HistoryTab() {
   }, [startDate, endDate]);
 
   return (
-    <div className="space-y-8 animate-in fade-in duration-500">
+    <div className="space-y-6 md:space-y-8 animate-in fade-in duration-500">
       {/* Filter Section */}
-      <div className="bg-white p-8 rounded-2xl shadow-sm border border-blue-100 border-l-8">
-        <h2 className="text-xl font-bold mb-4 text-gray-800">Filter History Analisis</h2>
+      <div className="bg-white p-4 md:p-8 rounded-2xl shadow-sm border border-blue-100 border-l-8">
+        <h2 className="text-lg md:text-xl font-bold mb-4 text-gray-800">Filter History Analisis</h2>
         
         {/* Quick Date Filters */}
         <div className="flex gap-2 mb-6 flex-wrap">
           <button
             onClick={() => handleSetQuickDate(7)}
-            className={`px-4 py-2 rounded-lg text-xs font-bold transition ${
+            className={`px-3 md:px-4 py-2 rounded-lg text-xs font-bold whitespace-nowrap transition ${
               activeFilter === 7 ? "bg-blue-600 text-white hover:bg-blue-700" : "bg-gray-100 text-gray-800 hover:bg-gray-200"
             }`}
           >
@@ -119,7 +119,7 @@ export default function HistoryTab() {
           </button>
           <button
             onClick={() => handleSetQuickDate(30)}
-            className={`px-4 py-2 rounded-lg text-xs font-bold transition ${
+            className={`px-3 md:px-4 py-2 rounded-lg text-xs font-bold whitespace-nowrap transition ${
               activeFilter === 30 ? "bg-blue-600 text-white hover:bg-blue-700" : "bg-gray-100 text-gray-800 hover:bg-gray-200"
             }`}
           >
@@ -127,7 +127,7 @@ export default function HistoryTab() {
           </button>
           <button
             onClick={() => handleSetQuickDate(90)}
-            className={`px-4 py-2 rounded-lg text-xs font-bold transition ${
+            className={`px-3 md:px-4 py-2 rounded-lg text-xs font-bold whitespace-nowrap transition ${
               activeFilter === 90 ? "bg-blue-600 text-white hover:bg-blue-700" : "bg-gray-100 text-gray-800 hover:bg-gray-200"
             }`}
           >
@@ -135,7 +135,7 @@ export default function HistoryTab() {
           </button>
           <button
             onClick={handleShowAllData}
-            className={`px-4 py-2 rounded-lg text-xs font-bold transition ${
+            className={`px-3 md:px-4 py-2 rounded-lg text-xs font-bold whitespace-nowrap transition ${
               activeFilter === "all" ? "bg-blue-600 text-white hover:bg-blue-700" : "bg-gray-100 text-gray-800 hover:bg-gray-200"
             }`}
           >
@@ -144,8 +144,8 @@ export default function HistoryTab() {
         </div>
 
         {/* Date Range Inputs */}
-        <div className="flex gap-4 items-end flex-wrap">
-          <div className="flex-1 min-w-[150px]">
+        <div className="flex gap-3 md:gap-4 items-end flex-col sm:flex-row">
+          <div className="w-full sm:flex-1 sm:min-w-[150px]">
             <label className="text-[10px] font-bold text-gray-400 block mb-1">DARI TANGGAL</label>
             <input
               type="date"
@@ -154,10 +154,10 @@ export default function HistoryTab() {
                 setStartDate(e.target.value);
                 setActiveFilter(null);
               }}
-              className="w-full p-3 border rounded-xl bg-gray-50 focus:outline-none focus:ring-2 focus:ring-blue-500"
+              className="w-full p-3 border rounded-xl bg-gray-50 focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm"
             />
           </div>
-          <div className="flex-1 min-w-[150px]">
+          <div className="w-full sm:flex-1 sm:min-w-[150px]">
             <label className="text-[10px] font-bold text-gray-400 block mb-1">SAMPAI TANGGAL</label>
             <input
               type="date"
@@ -166,19 +166,19 @@ export default function HistoryTab() {
                 setEndDate(e.target.value);
                 setActiveFilter(null);
               }}
-              className="w-full p-3 border rounded-xl bg-gray-50 focus:outline-none focus:ring-2 focus:ring-blue-500"
+              className="w-full p-3 border rounded-xl bg-gray-50 focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm"
             />
           </div>
         </div>
       </div>
 
       {/* Charts Section */}
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 md:gap-8">
         {/* Pie Chart - Distribution by Category */}
-        <div className="bg-white p-8 rounded-2xl shadow-md border border-gray-50">
-          <h3 className="text-lg font-bold mb-6 text-gray-800">Distribusi Produk berdasarkan Kelarisan</h3>
+        <div className="bg-white p-4 md:p-8 rounded-2xl shadow-md border border-gray-50">
+          <h3 className="text-base md:text-lg font-bold mb-6 text-gray-800">Distribusi Produk berdasarkan Kelarisan</h3>
           {categoryChartData.length > 0 ? (
-            <ResponsiveContainer width="100%" height={300}>
+            <ResponsiveContainer width="100%" height={250}>
               <PieChart>
                 <Pie
                   data={categoryChartData}
@@ -186,7 +186,7 @@ export default function HistoryTab() {
                   cy="50%"
                   labelLine={false}
                   label={({ name, value }) => `${name}: ${value}`}
-                  outerRadius={100}
+                  outerRadius={80}
                   fill="#8884d8"
                   dataKey="value"
                 >
@@ -198,74 +198,74 @@ export default function HistoryTab() {
               </PieChart>
             </ResponsiveContainer>
           ) : (
-            <div className="h-[300px] flex items-center justify-center text-gray-400">Tidak ada data untuk ditampilkan</div>
+            <div className="h-[250px] flex items-center justify-center text-gray-400 text-sm">Tidak ada data untuk ditampilkan</div>
           )}
         </div>
 
         {/* Bar Chart - Top Products by Sales */}
-        <div className="bg-white p-8 rounded-2xl shadow-md border border-gray-50">
-          <h3 className="text-lg font-bold mb-6 text-gray-800">Top Produk berdasarkan Penjualan</h3>
+        <div className="bg-white p-4 md:p-8 rounded-2xl shadow-md border border-gray-50">
+          <h3 className="text-base md:text-lg font-bold mb-6 text-gray-800">Top Produk berdasarkan Penjualan</h3>
           {productStats.length > 0 ? (
-            <ResponsiveContainer width="100%" height={300}>
+            <ResponsiveContainer width="100%" height={250}>
               <BarChart data={productStats.slice(0, 5)}>
                 <CartesianGrid strokeDasharray="3 3" />
-                <XAxis dataKey="name" angle={-45} textAnchor="end" height={80} />
-                <YAxis />
+                <XAxis dataKey="name" angle={-45} textAnchor="end" height={80} tick={{ fontSize: 12 }} />
+                <YAxis tick={{ fontSize: 12 }} />
                 <Tooltip />
                 <Bar dataKey="total" fill="#3b82f6" name="Total Penjualan" />
               </BarChart>
             </ResponsiveContainer>
           ) : (
-            <div className="h-[300px] flex items-center justify-center text-gray-400">Tidak ada data untuk ditampilkan</div>
+            <div className="h-[250px] flex items-center justify-center text-gray-400 text-sm">Tidak ada data untuk ditampilkan</div>
           )}
         </div>
       </div>
 
       {/* Summary Stats */}
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-        <div className="bg-gradient-to-br from-green-50 to-green-100 p-6 rounded-2xl border border-green-200">
-          <p className="text-sm text-green-700 font-semibold mb-2">Produk Laris</p>
-          <p className="text-4xl font-black text-green-600">{categoryStats.Laris}</p>
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6">
+        <div className="bg-gradient-to-br from-green-50 to-green-100 p-4 md:p-6 rounded-2xl border border-green-200">
+          <p className="text-xs md:text-sm text-green-700 font-semibold mb-2">Produk Laris</p>
+          <p className="text-3xl md:text-4xl font-black text-green-600">{categoryStats.Laris}</p>
           <p className="text-xs text-green-600 mt-2">dari {filteredData.length} data</p>
         </div>
-        <div className="bg-gradient-to-br from-yellow-50 to-yellow-100 p-6 rounded-2xl border border-yellow-200">
-          <p className="text-sm text-yellow-700 font-semibold mb-2">Produk Kurang Laris</p>
-          <p className="text-4xl font-black text-yellow-600">{categoryStats["Kurang Laris"]}</p>
+        <div className="bg-gradient-to-br from-yellow-50 to-yellow-100 p-4 md:p-6 rounded-2xl border border-yellow-200">
+          <p className="text-xs md:text-sm text-yellow-700 font-semibold mb-2">Produk Kurang Laris</p>
+          <p className="text-3xl md:text-4xl font-black text-yellow-600">{categoryStats["Kurang Laris"]}</p>
           <p className="text-xs text-yellow-600 mt-2">dari {filteredData.length} data</p>
         </div>
-        <div className="bg-gradient-to-br from-red-50 to-red-100 p-6 rounded-2xl border border-red-200">
-          <p className="text-sm text-red-700 font-semibold mb-2">Produk Tidak Laris</p>
-          <p className="text-4xl font-black text-red-600">{categoryStats["Tidak Laris"]}</p>
+        <div className="bg-gradient-to-br from-red-50 to-red-100 p-4 md:p-6 rounded-2xl border border-red-200 sm:col-span-2 lg:col-span-1">
+          <p className="text-xs md:text-sm text-red-700 font-semibold mb-2">Produk Tidak Laris</p>
+          <p className="text-3xl md:text-4xl font-black text-red-600">{categoryStats["Tidak Laris"]}</p>
           <p className="text-xs text-red-600 mt-2">dari {filteredData.length} data</p>
         </div>
       </div>
 
       {/* History Table */}
       <div className="bg-white rounded-2xl shadow-xl overflow-hidden border border-gray-100">
-        <div className="bg-gray-900 p-4">
-          <h3 className="text-white font-bold text-sm flex items-center gap-2">
-            <Calendar size={18} /> Riwayat Analisis Lengkap
+        <div className="bg-gray-900 p-3 md:p-4">
+          <h3 className="text-white font-bold text-xs md:text-sm flex items-center gap-2">
+            <Calendar size={16} className="md:w-[18px] md:h-[18px]" /> Riwayat Analisis Lengkap
           </h3>
         </div>
         <div className="overflow-x-auto">
-          <table className="w-full">
+          <table className="w-full text-sm">
             <thead className="bg-gray-50 text-left border-b">
               <tr>
-                <th className="px-6 py-4 text-xs font-bold text-gray-500 uppercase tracking-widest">Tanggal</th>
-                <th className="px-6 py-4 text-xs font-bold text-gray-500 uppercase tracking-widest">Produk</th>
-                <th className="px-6 py-4 text-xs font-bold text-gray-500 uppercase tracking-widest">Total Penjualan</th>
-                <th className="px-6 py-4 text-xs font-bold text-gray-500 uppercase tracking-widest">Status</th>
+                <th className="px-3 md:px-6 py-3 md:py-4 text-xs font-bold text-gray-500 uppercase tracking-widest whitespace-nowrap">Tanggal</th>
+                <th className="px-3 md:px-6 py-3 md:py-4 text-xs font-bold text-gray-500 uppercase tracking-widest whitespace-nowrap">Produk</th>
+                <th className="px-3 md:px-6 py-3 md:py-4 text-xs font-bold text-gray-500 uppercase tracking-widest whitespace-nowrap">Penjualan</th>
+                <th className="px-3 md:px-6 py-3 md:py-4 text-xs font-bold text-gray-500 uppercase tracking-widest whitespace-nowrap">Status</th>
               </tr>
             </thead>
             <tbody className="divide-y divide-gray-100">
               {filteredData.length > 0 ? (
                 filteredData.map((item) => (
                   <tr key={item.id} className="hover:bg-blue-50 transition">
-                    <td className="px-6 py-4 font-medium text-gray-600">{item.date}</td>
-                    <td className="px-6 py-4 font-bold text-gray-800">{item.product_name}</td>
-                    <td className="px-6 py-4 text-gray-600 font-semibold">{item.total_sold} Unit</td>
-                    <td className="px-6 py-4">
-                      <span className={`px-3 py-1 rounded-full text-[10px] font-black uppercase ${
+                    <td className="px-3 md:px-6 py-3 md:py-4 font-medium text-gray-600 text-xs md:text-sm whitespace-nowrap">{item.date}</td>
+                    <td className="px-3 md:px-6 py-3 md:py-4 font-bold text-gray-800 text-xs md:text-sm whitespace-nowrap">{item.product_name}</td>
+                    <td className="px-3 md:px-6 py-3 md:py-4 text-gray-600 font-semibold text-xs md:text-sm whitespace-nowrap">{item.total_sold} Unit</td>
+                    <td className="px-3 md:px-6 py-3 md:py-4">
+                      <span className={`px-3 py-1 rounded-full text-[10px] font-black uppercase inline-block ${
                         item.category === 'Laris' ? 'bg-green-100 text-green-700' :
                         item.category === 'Kurang Laris' ? 'bg-yellow-100 text-yellow-700' :
                         'bg-red-100 text-red-700'
@@ -277,7 +277,7 @@ export default function HistoryTab() {
                 ))
               ) : (
                 <tr>
-                  <td colSpan={4} className="px-6 py-10 text-center text-gray-400 italic">
+                  <td colSpan={4} className="px-3 md:px-6 py-6 md:py-10 text-center text-gray-400 italic text-xs md:text-sm">
                     Tidak ada history untuk tanggal yang dipilih
                   </td>
                 </tr>

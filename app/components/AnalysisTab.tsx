@@ -34,49 +34,96 @@ export default function AnalysisTab() {
 
   return (
     <div className="space-y-8 animate-in fade-in duration-500">
-      <div className="bg-white p-8 rounded-2xl shadow-sm border border-blue-100 border-l-8">
-        <h2 className="text-xl font-bold mb-4 text-gray-800">Klasifikasi Berdasarkan Waktu</h2>
-        <div className="flex gap-2 mb-6">
-          <button onClick={() => setQuickDate("weekly")} className={`px-4 py-2 rounded-lg text-xs font-bold ${periodType === 'weekly' ? 'bg-blue-600 text-white' : 'bg-gray-100'}`}>MINGGUAN (7 HARI)</button>
-          <button onClick={() => setQuickDate("monthly")} className={`px-4 py-2 rounded-lg text-xs font-bold ${periodType === 'monthly' ? 'bg-blue-600 text-white' : 'bg-gray-100'}`}>BULANAN (30 HARI)</button>
+      <div className="bg-white p-6 md:p-8 rounded-2xl shadow-sm border border-blue-100 border-l-8 overflow-x-auto">
+        <h2 className="text-lg md:text-xl font-bold mb-4 text-gray-800">Klasifikasi Berdasarkan Waktu</h2>
+        <div className="flex gap-2 mb-6 flex-wrap">
+          <button
+            onClick={() => setQuickDate("weekly")}
+            className={`px-3 md:px-4 py-2 rounded-lg text-xs font-bold whitespace-nowrap ${
+              periodType === "weekly" ? "bg-blue-600 text-white" : "bg-gray-100"
+            }`}
+          >
+            MINGGUAN (7 HARI)
+          </button>
+          <button
+            onClick={() => setQuickDate("monthly")}
+            className={`px-3 md:px-4 py-2 rounded-lg text-xs font-bold whitespace-nowrap ${
+              periodType === "monthly" ? "bg-blue-600 text-white" : "bg-gray-100"
+            }`}
+          >
+            BULANAN (30 HARI)
+          </button>
         </div>
-        <div className="flex gap-4 items-end flex-wrap">
-          <div className="flex-1 min-w-[150px]">
+        <div className="flex gap-3 md:gap-4 items-end flex-col md:flex-row">
+          <div className="w-full md:flex-1 md:min-w-[150px]">
             <label className="text-[10px] font-bold text-gray-400 block mb-1">DARI TANGGAL</label>
-            <input type="date" value={startDate} onChange={(e)=>setStartDate(e.target.value)} className="w-full p-3 border rounded-xl bg-gray-50" />
+            <input
+              type="date"
+              value={startDate}
+              onChange={(e) => setStartDate(e.target.value)}
+              className="w-full p-3 border rounded-xl bg-gray-50 text-sm"
+            />
           </div>
-          <div className="flex-1 min-w-[150px]">
+          <div className="w-full md:flex-1 md:min-w-[150px]">
             <label className="text-[10px] font-bold text-gray-400 block mb-1">SAMPAI TANGGAL</label>
-            <input type="date" value={endDate} onChange={(e)=>setEndDate(e.target.value)} className="w-full p-3 border rounded-xl bg-gray-50" />
+            <input
+              type="date"
+              value={endDate}
+              onChange={(e) => setEndDate(e.target.value)}
+              className="w-full p-3 border rounded-xl bg-gray-50 text-sm"
+            />
           </div>
-          <button onClick={handleFetchPeriodic} className="bg-blue-600 text-white px-8 py-3 rounded-xl font-bold">MULAI ANALISIS</button>
+          <button
+            onClick={handleFetchPeriodic}
+            className="w-full md:w-auto bg-blue-600 text-white px-6 md:px-8 py-3 rounded-xl font-bold hover:bg-blue-700 transition"
+          >
+            MULAI ANALISIS
+          </button>
         </div>
       </div>
       {periodicResults.length > 0 && (
         <div className="bg-white rounded-2xl shadow-xl overflow-hidden border border-gray-100">
-          <div className="bg-gray-900 p-4"><h3 className="text-white font-bold text-sm">Hasil Laporan Penjualan & Klasifikasi</h3></div>
-          <table className="min-w-full">
-            <thead className="bg-gray-50 text-left border-b">
-              <tr>
-                <th className="px-6 py-4 text-xs font-bold text-gray-500 uppercase tracking-widest">Produk</th>
-                <th className="px-6 py-4 text-xs font-bold text-gray-500 uppercase tracking-widest">Akumulasi Terjual</th>
-                <th className="px-6 py-4 text-xs font-bold text-gray-500 uppercase tracking-widest">Label Kelarisan</th>
-              </tr>
-            </thead>
-            <tbody className="divide-y divide-gray-100">
-              {periodicResults.map((item, i) => (
-                <tr key={i} className="hover:bg-blue-50 transition">
-                  <td className="px-6 py-4 font-bold text-gray-800">{item.product_name}</td>
-                  <td className="px-6 py-4 font-medium text-gray-600">{item.total_sold} Unit</td>
-                  <td className="px-6 py-4">
-                    <span className={`px-4 py-1 rounded-full text-[10px] font-black uppercase ${item.category === 'Laris' ? 'bg-green-100 text-green-700' : item.category === 'Kurang Laris' ? 'bg-yellow-100 text-yellow-700' : 'bg-red-100 text-red-700'}`}>
-                      {item.category}
-                    </span>
-                  </td>
+          <div className="bg-gray-900 p-4">
+            <h3 className="text-white font-bold text-sm">Hasil Laporan Penjualan & Klasifikasi</h3>
+          </div>
+          <div className="overflow-x-auto">
+            <table className="min-w-full text-sm md:text-base">
+              <thead className="bg-gray-50 text-left border-b">
+                <tr>
+                  <th className="px-4 md:px-6 py-3 md:py-4 text-xs font-bold text-gray-500 uppercase tracking-widest">
+                    Produk
+                  </th>
+                  <th className="px-4 md:px-6 py-3 md:py-4 text-xs font-bold text-gray-500 uppercase tracking-widest">
+                    Akumulasi
+                  </th>
+                  <th className="px-4 md:px-6 py-3 md:py-4 text-xs font-bold text-gray-500 uppercase tracking-widest">
+                    Kelarisan
+                  </th>
                 </tr>
-              ))}
-            </tbody>
-          </table>
+              </thead>
+              <tbody className="divide-y divide-gray-100">
+                {periodicResults.map((item, i) => (
+                  <tr key={i} className="hover:bg-blue-50 transition">
+                    <td className="px-4 md:px-6 py-3 md:py-4 font-bold text-gray-800">{item.product_name}</td>
+                    <td className="px-4 md:px-6 py-3 md:py-4 font-medium text-gray-600">{item.total_sold} Unit</td>
+                    <td className="px-4 md:px-6 py-3 md:py-4">
+                      <span
+                        className={`px-3 py-1 rounded-full text-[10px] font-black uppercase inline-block ${
+                          item.category === "Laris"
+                            ? "bg-green-100 text-green-700"
+                            : item.category === "Kurang Laris"
+                            ? "bg-yellow-100 text-yellow-700"
+                            : "bg-red-100 text-red-700"
+                        }`}
+                      >
+                        {item.category}
+                      </span>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
         </div>
       )}
     </div>
