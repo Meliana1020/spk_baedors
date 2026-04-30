@@ -75,6 +75,10 @@ app.get('/check-db', async (req, res) => {
     res.json({ message: "Koneksi ke Supabase Aman!", total_data: data });
 });
 
-app.listen(PORT, () => {
-    console.log(`Backend nyala di http://localhost:${PORT}`);
-});
+if (process.env.NODE_ENV !== 'production') {
+    app.listen(PORT, () => {
+        console.log(`Backend nyala di http://localhost:${PORT}`);
+    });
+}
+
+module.exports = app;
