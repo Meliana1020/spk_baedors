@@ -1,7 +1,6 @@
 "use client";
 
 import { LayoutDashboard, Package, BarChart3, Clock, Menu, X } from "lucide-react";
-import Image from "next/image";
 
 interface SidebarProps {
   activeTab: string;
@@ -13,7 +12,7 @@ interface SidebarProps {
 export default function Sidebar({ activeTab, setActiveTab, isOpen, setIsOpen }: SidebarProps) {
   const handleTabClick = (tab: string) => {
     setActiveTab(tab);
-    setIsOpen(false); // Close sidebar on mobile after selecting
+    setIsOpen(false);
   };
 
   const navItems = [
@@ -25,7 +24,6 @@ export default function Sidebar({ activeTab, setActiveTab, isOpen, setIsOpen }: 
 
   return (
     <>
-      {/* Mobile Menu Button */}
       <button
         onClick={() => setIsOpen(!isOpen)}
         className="fixed top-4 left-4 lg:hidden z-40 bg-blue-600 text-white p-3 rounded-full shadow-lg hover:bg-blue-700 transition"
@@ -33,7 +31,6 @@ export default function Sidebar({ activeTab, setActiveTab, isOpen, setIsOpen }: 
         {isOpen ? <X size={24} /> : <Menu size={24} />}
       </button>
 
-      {/* Overlay for mobile */}
       {isOpen && (
         <div
           className="fixed inset-0 bg-black/50 lg:hidden z-30"
@@ -41,14 +38,12 @@ export default function Sidebar({ activeTab, setActiveTab, isOpen, setIsOpen }: 
         />
       )}
 
-      {/* Sidebar */}
       <aside
-        className={`fixed top-0 left-0 h-full w-64 bg-gray-900 text-white shadow-xl z-40 transform transition-transform duration-300 ease-in-out lg:translate-x-0 ${
+        className={`rounded-tr-4xl fixed top-0 left-0 h-full w-64 bg-gray-900 text-white shadow-xl z-40 transform transition-transform duration-300 ease-in-out lg:translate-x-0 ${
           isOpen ? "translate-x-0" : "-translate-x-full"
         }`}
       >
         <div className="p-6">
-          {/* Close button for mobile */}
           <button
             onClick={() => setIsOpen(false)}
             className="lg:hidden absolute top-4 right-4 text-gray-400 hover:text-white"
@@ -56,7 +51,6 @@ export default function Sidebar({ activeTab, setActiveTab, isOpen, setIsOpen }: 
             <X size={24} />
           </button>
 
-          {/* Logo */}
           <div className="mb-10 text-center mt-2">
             <h2 className="text-xl font-bold text-blue-400 tracking-tighter">LM BAEDORS MART</h2>
             <p className="text-[10px] text-gray-500 mt-1 uppercase tracking-widest font-bold">
@@ -64,7 +58,6 @@ export default function Sidebar({ activeTab, setActiveTab, isOpen, setIsOpen }: 
             </p>
           </div>
 
-          {/* Navigation */}
           <nav className="space-y-2">
             {navItems.map(({ id, label, icon: Icon }) => (
               <button
