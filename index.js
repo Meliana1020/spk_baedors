@@ -41,10 +41,10 @@ const inventoryRoutes = require('./routes/inventory');
 const app = express();
 const PORT = process.env.PORT || 5000;
 
-const allowedOrigins = [
-    'http://localhost:3000', 
-    'https://spk-baedors.vercel.app' 
-];
+// const allowedOrigins = [
+//     'http://localhost:3000', 
+//     'https://spk-baedors.vercel.app' 
+// ];
 
 app.use(cors());
 
