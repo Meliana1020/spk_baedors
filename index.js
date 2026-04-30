@@ -43,19 +43,10 @@ const PORT = process.env.PORT || 5000;
 
 const allowedOrigins = [
     'http://localhost:3000', 
-    'https://spk-baedors.vercel.app/' 
+    'https://spk-baedors.vercel.app' 
 ];
 
-app.use(cors({
-  origin: function (origin, callback) {
-    if (!origin || allowedOrigins.indexOf(origin) !== -1) {
-      callback(null, true);
-    } else {
-      callback(new Error('Blocked by CORS'));
-    }
-  },
-  credentials: true
-}));
+app.use(cors());
 
 app.use(express.json());
 
