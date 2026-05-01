@@ -19,7 +19,7 @@ app.use(cors());
 app.use(express.json());
 
 app.use('/api/analysis', analysisRoutes);
-app.use('/api/inventory/daily', inventoryRoutes);
+app.use('/api/inventory', inventoryRoutes);
 
 app.get('/', (req, res) => {
     res.send('API SPK Toko LM Baedors Mart is Running! 🚀');
@@ -37,4 +37,4 @@ if (process.env.NODE_ENV !== 'production') {
     });
 }
 
-module.exports = serverless(app);
+module.exports.handler = serverless(app);
