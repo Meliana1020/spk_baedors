@@ -51,7 +51,7 @@ app.use(cors());
 app.use(express.json());
 
 app.use('/api/analysis', analysisRoutes);
-app.use('/api/inventory', inventoryRoutes);
+app.use('/api/inventory/daily', inventoryRoutes);
 
 app.get('/', (req, res) => {
     res.send('API SPK Toko LM Baedors Mart is Running! 🚀');
