@@ -92,13 +92,30 @@ router.get('/evaluate', async (req, res) => {
   }
 });
 
+router.get('/history', async (req, res) => {
+  const { startDate, endDate } = req.query;
+  try {
+    let query = supabase
+      .from('analysis_history')
+      .select('*')
+      .order('date', { ascending: false });
+
+    if (startDate) query = query.gte('date', startDate);
+    if (endDate) query = query.lte('date', endDate);
+
+    const { data, error } = await query;
+    if (error) throw error;
+    res.json(data);
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
 router.get('/periodic-classification', async (req, res) => {
-  const { startDate, endDate, periodType } = req.query;
+  const { startDate, endDate } = req.query;
 
   try {
     const { data: trainingData } = await supabase.from('sales_training_labeled').select('*');
-
-    // Ambil data berdasarkan range tanggal dari schema date
     const { data: dailyData, error } = await supabase
       .from('daily_sales')
       .select('product_name, quantity_sold')
@@ -106,13 +123,8 @@ router.get('/periodic-classification', async (req, res) => {
       .lte('transaction_date', endDate);
 
     if (error) throw error;
+    if (!dailyData || dailyData.length === 0) return res.json({ results: [] });
 
-    // Jika data kosong di range tsb, kirim array kosong agar frontend tidak error
-    if (!dailyData || dailyData.length === 0) {
-      return res.json({ results: [] });
-    }
-
-    // Proses Agregasi
     const summary = dailyData.reduce((acc, curr) => {
       acc[curr.product_name] = (acc[curr.product_name] || 0) + curr.quantity_sold;
       return acc;
@@ -125,11 +137,22 @@ router.get('/periodic-classification', async (req, res) => {
       return {
         product_name: name,
         total_sold: totalSold,
-        category: prediction.category
+        category: prediction.category,
+        date: new Date().toISOString().split('T')[0] // Tambahkan tanggal hari ini
       };
     });
 
-    // Kirim dengan key 'results' agar dibaca Frontend
+    // --- SIMPAN KE RIWAYAT (ANALYSIS_HISTORY) ---
+    // Mel, ini bagian yang membuat data muncul di History Tab
+    const historyToSave = results.map(item => ({
+      product_name: item.product_name,
+      total_sold: item.total_sold,
+      category: item.category,
+      date: item.date
+    }));
+
+    await supabase.from('analysis_history').insert(historyToSave);
+
     res.json({ results }); 
   } catch (err) {
     res.status(500).json({ error: err.message });

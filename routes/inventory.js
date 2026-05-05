@@ -1,9 +1,10 @@
 const express = require('express');
 const router = express.Router();
 const supabase = require('../config/supabase');
+const protect = require('../middleware/authMiddleware');
 
 // GET: Ambil log harian
-router.get('/daily', async (req, res) => {
+router.get('/daily', protect, async (req, res) => {
   try {
     const { data, error } = await supabase
       .from('daily_sales')
@@ -18,8 +19,7 @@ router.get('/daily', async (req, res) => {
 });
 
 // POST: Simpan transaksi (DISINKRONKAN)
-router.post('/daily', async (req, res) => {
-  // Pastikan nama variabel di sini cocok dengan yang dikirim frontend
+router.post('/daily', protect, async (req, res) => {
   const { product_name, quantity_sold, transaction_date } = req.body;
   
   try {
@@ -28,8 +28,9 @@ router.post('/daily', async (req, res) => {
       .insert([
         { 
           product_name, 
-          quantity_sold: Number(quantity_sold), // Pastikan masuk sebagai angka
-          transaction_date 
+          quantity_sold: Number(quantity_sold), 
+          transaction_date,
+          user_id: req.user.id 
         }
       ])
       .select();
@@ -42,7 +43,7 @@ router.post('/daily', async (req, res) => {
   }
 });
 
-router.put('/daily/:id', async (req, res) => {
+router.put('/daily/:id', protect, async (req, res) => {
   const { id } = req.params;
   const { product_name, quantity_sold, transaction_date } = req.body;
   try {
@@ -78,7 +79,5 @@ router.delete('/daily/:id', async (req, res) => {
     res.status(500).json({ error: err.message });
   }
 });
-
-module.exports = router;
 
 module.exports = router;
