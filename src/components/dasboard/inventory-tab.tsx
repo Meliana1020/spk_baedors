@@ -1,12 +1,6 @@
 "use client";
 
 import { useInventory } from "@/hooks/useInventory";
-import { Plus, XCircle } from "lucide-react";
-import { Card, CardContent} from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import InventoryFormHeader from "../fragments/dashboard/inventory/header";
-import AutocompleteList from "../fragments/dashboard/inventory/auto-complatelist";
 import InventoryTable from "../fragments/dashboard/inventory/table";
 import InventoryForm from "../fragments/dashboard/inventory/form";
 

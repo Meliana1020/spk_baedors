@@ -5,7 +5,7 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import InventoryFormHeader from "./header";
-import AutocompleteList from "./auto-complatelist";
+import AutocompleteList from "./auto-complate-list";
 
 interface InventoryFormProps {
   isEditing: boolean;
