@@ -89,7 +89,7 @@ export default function HistoryTab() {
               </TableHeader>
               <TableBody>
                 {filteredData.length > 0 ? (
-                  filteredData.map((item) => (
+                  filteredData.map((item:any) => (
                     <TableRow key={item.id} className="border-white/5 hover:bg-blue-500/5 group transition-colors">
                       <TableCell className="px-6 py-4 text-muted-foreground text-xs">{item.date}</TableCell>
                       <TableCell className="px-6 py-4 font-bold">{item.product_name}</TableCell>
