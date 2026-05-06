@@ -10,6 +10,7 @@ function SidebarHeader() {
         <div className="flex flex-col leading-none">
           <h2 className="text-xl font-black tracking-tight uppercase">Baedors</h2>
           <span className="text-[10px] font-bold tracking-[0.4em] text-blue-500 uppercase mt-1">Mart · SPK</span>
+          <span className="text-[10px] font-bold tracking-[0.4em] text-blue-500 uppercase mt-1">Meliana</span>
         </div>
       </div>
     </div>
