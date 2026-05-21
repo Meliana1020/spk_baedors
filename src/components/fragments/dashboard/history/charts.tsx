@@ -51,12 +51,12 @@ export default function HistoryCharts({ loading, chartData }: HistoryChartsProps
                     <Cell key={`cell-${index}`} fill={entry.fill} className="outline-none" />
                   ))}
                 </Pie>
-                <Tooltip 
-                  contentStyle={{ 
-                    background: "rgba(238, 238, 245, 0.95)", 
-                    border: "1px solid rgba(255,255,255,0.1)", 
-                    borderRadius: 12 
-                  }} 
+                <Tooltip
+                  contentStyle={{
+                    background: "rgba(238, 238, 245, 0.95)",
+                    border: "1px solid rgba(255,255,255,0.1)",
+                    borderRadius: 12
+                  }}
                 />
               </PieChart>
             </ResponsiveContainer>
@@ -66,7 +66,6 @@ export default function HistoryCharts({ loading, chartData }: HistoryChartsProps
         </CardContent>
       </Card>
 
-      {/* 2. Bar Chart - Top Produk */}
       <Card className="glass border-none">
         <CardHeader>
           <CardTitle className="text-base font-bold text-foreground">
@@ -88,7 +87,17 @@ export default function HistoryCharts({ loading, chartData }: HistoryChartsProps
                 <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="rgba(255,255,255,0.05)" />
                 <XAxis dataKey="name" angle={-20} textAnchor="end" height={60} tick={{ fontSize: 10, fill: "gray" }} axisLine={false} />
                 <YAxis tick={{ fontSize: 10, fill: "gray" }} axisLine={false} />
-                <Tooltip cursor={false} contentStyle={{ background: "#0f172a", border: "none", borderRadius: "8px" }} />
+                <Tooltip
+                  cursor={false}
+                  contentStyle={{
+                    background: "var(--popover)",
+                    color: "var(--popover-foreground)",
+                    border: "1px solid var(--border)",
+                    borderRadius: "8px"
+                  }}
+                  itemStyle={{ color: "var(--popover-foreground)" }}
+                  labelStyle={{ color: "var(--popover-foreground)", fontWeight: "bold" }}
+                />
                 <Bar dataKey="total" fill="url(#barGradient)" radius={[6, 6, 0, 0]} barSize={40} />
               </BarChart>
             </ResponsiveContainer>

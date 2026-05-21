@@ -35,19 +35,42 @@ export function useDashboardData() {
     }
   };
 
-  const chartData = useMemo(() => {
-    const aggregate = historyData.reduce((acc: any, item: any) => {
+  const fullAgregatedData = useMemo(() => {
+    if (!historyData || historyData.length === 0) return [];
+
+    const latestDate = historyData[0]?.date;
+
+    const latestAnalysisResults = historyData.filter((item: any) => item.date === latestDate);
+
+    return latestAnalysisResults.reduce((acc: any, item: any) => {
       const ex = acc.find((p: any) => p.name === item.product_name);
-      if (ex) ex.total += item.total_sold;
-      else acc.push({ name: item.product_name, total: item.total_sold });
+      if (ex) {
+
+        ex.total += item.total_sold;
+      } else {
+        acc.push({ 
+          name: item.product_name, 
+          total: item.total_sold,
+          category: item.category 
+        });
+      }
       return acc;
     }, []);
-    return aggregate.slice(0, 5);
   }, [historyData]);
 
+  const chartData = useMemo(() => {
+    return [...fullAgregatedData]
+      .sort((a, b) => b.total - a.total)
+      .slice(0, 5);
+  }, [fullAgregatedData]);
+
   return {
-    inputQty, setInputQty,
-    prediction, loading,
-    chartData, handlePredict
+    inputQty,
+    setInputQty,
+    prediction,
+    loading,
+    chartData,         
+    fullAgregatedData,  
+    handlePredict
   };
 }

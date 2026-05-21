@@ -8,7 +8,7 @@ import { Input } from "@/components/ui/input";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { CategoryBadge } from "@/components/fragments/dashboard/analysis/category-badge";
 import { TableSkeleton, CardSkeleton } from "./skeleton";
-import HistoryCharts from "../fragments/dashboard/history/charts"; // Modularisasi chart bre
+import HistoryCharts from "../fragments/dashboard/history/charts"; 
 
 export default function HistoryTab() {
   const {
@@ -18,7 +18,6 @@ export default function HistoryTab() {
 
   return (
     <div className="space-y-7 animate-fade-in">
-      {/* 1. FILTER SECTION */}
       <Card className="glass border-none relative overflow-hidden">
         <div className="absolute -top-16 -right-16 w-52 h-52 bg-blue-500/10 blur-3xl rounded-full" />
         <CardContent className="p-7 relative">
@@ -55,10 +54,8 @@ export default function HistoryTab() {
         </CardContent>
       </Card>
 
-      {/* 2. CHARTS SECTION (Modularized) */}
       <HistoryCharts loading={loading} chartData={chartData} />
 
-      {/* 3. SUMMARY CARDS */}
       <div className="grid grid-cols-1 sm:grid-cols-3 gap-5">
         {loading ? <CardSkeleton /> : (
           <>
@@ -69,7 +66,6 @@ export default function HistoryTab() {
         )}
       </div>
 
-      {/* 4. HISTORY TABLE */}
       <Card className="glass border-none overflow-hidden">
         <div className="p-5 border-b border-white/10 bg-white/5 flex items-center justify-between">
           <h3 className="font-bold flex items-center gap-2 italic text-sm">

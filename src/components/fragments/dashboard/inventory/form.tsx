@@ -37,7 +37,6 @@ export default function InventoryForm({
         <InventoryFormHeader isEditing={isEditing} />
 
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
-          {/* Input Nama Produk + Autocomplete */}
           <div className="relative">
             <Input
               placeholder="Nama Produk"
@@ -54,7 +53,6 @@ export default function InventoryForm({
             />
           </div>
 
-          {/* Input Jumlah */}
           <Input
             type="number"
             placeholder="Jumlah"
@@ -63,7 +61,6 @@ export default function InventoryForm({
             className="bg-white/5 border-white/10 py-6"
           />
 
-          {/* Input Tanggal */}
           <Input
             type="date"
             value={form.date}
@@ -71,7 +68,6 @@ export default function InventoryForm({
             className="bg-white/5 border-white/10 py-6"
           />
 
-          {/* Action Buttons */}
           <div className="flex gap-2">
             <Button
               onClick={handleSave}

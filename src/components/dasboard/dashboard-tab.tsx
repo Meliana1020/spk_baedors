@@ -7,6 +7,7 @@ import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContaine
 import StatCard from "../fragments/dashboard/dashboard-tab/stat-card";
 import PredictionForm from "../fragments/dashboard/dashboard-tab/prediction-form";
 import ClassificationLegend from "../fragments/dashboard/dashboard-tab/clasification-legend";
+import AiInsights from "../fragments/dashboard/dashboard-tab/ai-insight";
 
 export default function DashboardTab({ accuracyData }: { accuracyData: any }) {
   const { inputQty, setInputQty, prediction, loading, chartData, handlePredict } = useDashboardData();
@@ -44,7 +45,17 @@ export default function DashboardTab({ accuracyData }: { accuracyData: any }) {
                 <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="rgba(255,255,255,0.05)" />
                 <XAxis dataKey="name" angle={-20} textAnchor="end" height={60} tick={{ fontSize: 10, fill: "gray" }} axisLine={false} />
                 <YAxis tick={{ fontSize: 10, fill: "gray" }} axisLine={false} />
-                <Tooltip cursor={false} contentStyle={{ background: "#0f172a", border: "none", borderRadius: "8px" }} />
+               <Tooltip
+                  cursor={false}
+                  contentStyle={{
+                    background: "var(--popover)",
+                    color: "var(--popover-foreground)",
+                    border: "1px solid var(--border)",
+                    borderRadius: "8px"
+                  }}
+                  itemStyle={{ color: "var(--popover-foreground)" }}
+                  labelStyle={{ color: "var(--popover-foreground)", fontWeight: "bold" }}
+                />
                 <Bar dataKey="total" fill="url(#barGradient)" radius={[6, 6, 0, 0]} barSize={40} />
               </BarChart>
             </ResponsiveContainer>
@@ -53,6 +64,7 @@ export default function DashboardTab({ accuracyData }: { accuracyData: any }) {
       </Card>
 
       <div className="grid grid-cols-1 lg:grid-cols-5 gap-6">
+        <AiInsights chartData={accuracyData?.raw_sales_data || chartData} />
         <PredictionForm 
           loading={loading} 
           inputQty={inputQty} 
