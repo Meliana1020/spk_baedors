@@ -113,7 +113,7 @@ router.get('/history', async (req, res) => {
 
 router.get('/periodic-classification', async (req, res) => {
   const { startDate, endDate } = req.query;
-
+  
   try {
     const { data: trainingData } = await supabase.from('sales_training_labeled').select('*');
     const { data: dailyData, error } = await supabase
