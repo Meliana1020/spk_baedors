@@ -14,36 +14,74 @@ class NaiveBayesService {
     return 'Tidak Laris';
   }
 
-  predict(inputQty, trainingData) {
-    const categories = ['Laris', 'Kurang Laris', 'Tidak Laris'];
+  // predict(inputQty, trainingData) {
+  //   const categories = ['Laris', 'Kurang Laris', 'Tidak Laris'];
     
-    const scores = categories.map(cat => {
-      const filtered = trainingData.filter(d => d.category === cat);
-      const count = filtered.length;
+  //   const scores = categories.map(cat => {
+  //     const filtered = trainingData.filter(d => d.category === cat);
+  //     const count = filtered.length;
       
-      // 1. Prior Probability P(Ci)
-      const prior = count / trainingData.length;
+  //     // 1. Prior Probability P(Ci)
+  //     const prior = count / trainingData.length;
 
-      if (count === 0) return { category: cat, score: 0 };
+  //     if (count === 0) return { category: cat, score: 0 };
 
-      // 2. Hitung Mean & Variance dari data training
-      const values = filtered.map(d => d.total_quantity_sold);
-      const mean = math.mean(values);
-      const variance = math.variance(values) || 0.0001; // Hindari pembagian nol
+  //     // 2. Hitung Mean & Variance dari data training
+  //     const values = filtered.map(d => d.total_quantity_sold);
+  //     const mean = math.mean(values);
+  //     const variance = math.variance(values) || 0.0001; // Hindari pembagian nol
 
-      // 3. Likelihood P(X|Ci)
-      const likelihood = this.calculateGaussian(inputQty, mean, variance);
+  //     // 3. Likelihood P(X|Ci)
+  //     const likelihood = this.calculateGaussian(inputQty, mean, variance);
 
-      // 4. Posterior P(Ci|X)
-      return {
-        category: cat,
-        score: likelihood * prior
-      };
-    });
+  //     // 4. Posterior P(Ci|X)
+  //     return {
+  //       category: cat,
+  //       score: likelihood * prior
+  //     };
+  //   });
 
-    // Pilih skor tertinggi sebagai hasil klasifikasi
-    return scores.reduce((prev, curr) => (curr.score > prev.score ? curr : prev));
+  //   // Pilih skor tertinggi sebagai hasil klasifikasi
+  //   return scores.reduce((prev, curr) => (curr.score > prev.score ? curr : prev));
+  // }
+
+   predict(inputQty, trainingData) {
+  const qty = parseInt(inputQty);
+
+  // --- SHORTCUT LOGIKA PAKAR (HINDARI ERROR DATA EKSTREM) ---
+  // Jika input melebihi batas maksimum data training Laris, mutlak beri label Laris
+  if (qty > 100) {
+    return { category: 'Laris', score: 1.0 };
   }
+  // Jika input di bawah batas minimum Kurang Laris, mutlak Tidak Laris
+  if (qty < 20) {
+    return { category: 'Tidak Laris', score: 1.0 };
+  }
+
+  // --- JIKA DI ANTARA 20 - 100, BIARKAN NAIVE BAYES YANG MENGHITUNG ---
+  const categories = ['Laris', 'Kurang Laris', 'Tidak Laris'];
+  
+  const scores = categories.map(cat => {
+    const filtered = trainingData.filter(d => d.category === cat);
+    const count = filtered.length;
+    
+    const prior = count / trainingData.length;
+    if (count === 0) return { category: cat, score: 0 };
+
+    const values = filtered.map(d => d.total_quantity_sold);
+    const mean = math.mean(values);
+    const variance = math.variance(values) || 0.0001;
+
+    const likelihood = this.calculateGaussian(qty, mean, variance);
+
+    return {
+      category: cat,
+      score: likelihood * prior
+    };
+  });
+
+  return scores.reduce((prev, curr) => (curr.score > prev.score ? curr : prev));
+}
 }
 
 module.exports = new NaiveBayesService();
